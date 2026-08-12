@@ -9,9 +9,6 @@ crash.*.log
 # Terraform generated Lambda ZIP
 terraform/lambda_function.zip
 
-# Local variables/secrets
-*.tfvars
-
 # Python
 __pycache__/
 *.pyc
