@@ -66,7 +66,6 @@ jobs:
       # --------------------------------------------------
 
       - name: Terraform Init
-        working-directory: terraform
         run: terraform init
 
 
@@ -75,7 +74,6 @@ jobs:
       # --------------------------------------------------
 
       - name: Terraform Format Check
-        working-directory: terraform
         run: terraform fmt -check
 
 
@@ -84,7 +82,6 @@ jobs:
       # --------------------------------------------------
 
       - name: Terraform Validate
-        working-directory: terraform
         run: terraform validate
 
 
@@ -93,7 +90,6 @@ jobs:
       # --------------------------------------------------
 
       - name: Terraform Plan
-        working-directory: terraform
         run: terraform plan
 
 
@@ -103,5 +99,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: terraform
         run: terraform apply -auto-approve
