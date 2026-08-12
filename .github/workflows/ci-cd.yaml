@@ -1,107 +1,17 @@
-name: Terraform AWS Deployment
+name: Debug GitHub OIDC
 
 on:
-  push:
-    branches:
-      - main
-
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: 
+  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
 
-env:
-  AWS_REGION: us-east-1
-
 jobs:
-
-  terraform:
+  debug:
 
     runs-on: ubuntu-latest
 
     steps:
-
-      # --------------------------------------------------
-      # Checkout
-      # --------------------------------------------------
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-
-      # --------------------------------------------------
-      # Configure AWS using GitHub OIDC
-      # --------------------------------------------------
-
-      - name: Configure AWS credentialsS
-        uses: aws-actions/configure-aws-credentials@v6.2.3
-        with:
-          role-to-assume: ${{ secrets.TERRAFORM_APPLY_ROLE}}
-          aws-region: ${{ env.AWS_REGION }}
-
-
-      # --------------------------------------------------
-      # Verify AWS connection
-      # --------------------------------------------------
-
-      - name: Verify AWS identity
-        run: |
-          aws sts get-caller-identity
-
-
-      # --------------------------------------------------
-      # Setup Terraform
-      # --------------------------------------------------
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-
-      # --------------------------------------------------
-      # Terraform Init
-      # --------------------------------------------------
-
-      - name: Terraform Init
-        working-directory: terraform
-        run: terraform init
-
-
-      # --------------------------------------------------
-      # Terraform Format Check
-      # --------------------------------------------------
-
-      - name: Terraform Format Check
-        working-directory: terraform
-        run: terraform fmt -check
-
-
-      # --------------------------------------------------
-      # Terraform Validate
-      # --------------------------------------------------
-
-      - name: Terraform Validate
-        working-directory: terraform
-        run: terraform validate
-
-
-      # --------------------------------------------------
-      # Terraform Plan
-      # --------------------------------------------------
-
-      - name: Terraform Plan
-        working-directory: terraform
-        run: terraform plan
-
-
-      # --------------------------------------------------
-      # Terraform Apply
-      # --------------------------------------------------
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: terraform
-        run: terraform apply -auto-approve
+      - name: Debug OIDC claims
+        uses: github/actions-oidc-debugger@main
